@@ -1,0 +1,36 @@
+spring:
+  config:
+    import:
+      - optional:file:./.env-dev[.properties]
+      - optional:file:../.env-dev[.properties]
+      - optional:file:./.env[.properties]
+      - optional:file:../.env[.properties]
+
+  logging:
+    group:
+      db: 'org.hibernate,org.springframework.data.jpa,org.springframework.jdbc'
+    level:
+      db: DEBUG
+
+  datasource:
+    url: ${DB_DEV_URL}:${DB_DEV_PORT}/${DB_DEV_NAME}
+    username: ${DB_DEV_USER}
+    password: ${DB_DEV_PASS}
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+      pool-name: 'hikari-pool'
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        tmp:
+          use_jdbc_metadata_defaults: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        hbm2ddl:
+          auto: none
+    open-in-view: false
+    show-sql: true
