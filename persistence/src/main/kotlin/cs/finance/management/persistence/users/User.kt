@@ -22,10 +22,10 @@ data class User(
 
     @Column(length = 500)
     @NotBlank
-    val password: String = "",
+    var password: String = "",
 
     @Enumerated(EnumType.STRING)
     @Column(length = 13)
-    var role: UserRole = UserRole.MITARBEITER,
+    var role: UserRole = UserRole.USER,
 
     ) : HasIdOfType<Long>

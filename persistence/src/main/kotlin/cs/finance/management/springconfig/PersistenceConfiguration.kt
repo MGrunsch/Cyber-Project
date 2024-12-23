@@ -5,8 +5,8 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
-@ComponentScan("cs.finance.management.persistence.*")
+@ComponentScan("cs.finance.management.persistence")
 @Configuration
-@EnableJpaRepositories("cs.finance.management.persistence.*")
-@EntityScan("cs.finance.management.persistence.*")
+@EnableJpaRepositories("cs.finance.management.persistence")
+@EntityScan("cs.finance.management.persistence")
 class PersistenceConfiguration

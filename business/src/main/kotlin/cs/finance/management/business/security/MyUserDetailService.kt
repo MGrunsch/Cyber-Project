@@ -1,10 +1,14 @@
 package cs.finance.management.business.security
 
 import cs.finance.management.persistence.users.UserRepository
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 
 @Service
@@ -13,12 +17,10 @@ class MyUserDetailService(
 ) : UserDetailsService {
 
     @Throws(UsernameNotFoundException::class)
-    override fun loadUserByUsername(name: String): UserDetails {
-        return userRepository.findByMail(name)?.let { user ->
-            val myUserDetails = MyUserDetails(user, "ROLE_${user.role.name}")
+    override fun loadUserByUsername(username: String): UserDetails {
+        val user = userRepository.findByMail(username)
+            ?: throw UsernameNotFoundException("User not found with email: $username")
 
-            myUserDetails
-
-        }?: throw UsernameNotFoundException("Username or password is wrong for $name")
+        return MyUserDetails(user, "ROLE_${user.role.name}")
     }
 }
