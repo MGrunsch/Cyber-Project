@@ -25,6 +25,10 @@ class UserService(
         return userRepository.findAll()
     }
 
+    fun findByMail(mail: String): User? {
+        return userRepository.findByMail(mail)
+    }
+
     @Transactional
     fun transferMoney(recipientId: Long, amount: BigDecimal) {
         val sender = getAuthenticatedUser()
