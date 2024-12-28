@@ -9,16 +9,25 @@ import org.springframework.security.core.userdetails.User as SpringUser
 class MyUserDetails private constructor(
     username: String,
     password: String,
-    authorities: Collection<GrantedAuthority> = AuthorityUtils.createAuthorityList("ROLE_GUEST")
+    enabled: Boolean = true,
+    accountNonExpired: Boolean = true,
+    credentialsNonExpired: Boolean = true,
+    accountNonLocked: Boolean = true,
+    authorities: Collection<GrantedAuthority> = AuthorityUtils.createAuthorityList("ROLE_USER")
 ): SpringUser(
     username,
     password,
+    enabled,
+    accountNonExpired,
+    credentialsNonExpired,
+    accountNonLocked,
     authorities,
 ) {
 
     constructor(user: PersistedUser, vararg authorities: String = arrayOf("ROLE_USER")) : this(
         username = user.mail,
         password = user.password,
+        enabled = user.enabled,
         authorities = AuthorityUtils.createAuthorityList(*authorities)
     )
 

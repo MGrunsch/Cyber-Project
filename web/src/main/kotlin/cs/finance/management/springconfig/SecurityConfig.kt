@@ -3,23 +3,19 @@ package cs.finance.management.springconfig
 import cs.finance.management.business.security.MyUserDetailService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.authentication.AuthenticationProvider
+import org.springframework.security.authentication.ProviderManager
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 
 @Configuration
-@EnableWebSecurity(debug = true)
 class SecurityConfig(
     private val userDetailService: MyUserDetailService
 ) {
@@ -33,7 +29,6 @@ class SecurityConfig(
             }
             .formLogin { form ->
                 form.loginPage("/login")
-                    .loginProcessingUrl("/login")
                     .defaultSuccessUrl("/dashboard", true)
                     .failureUrl("/login?error=true")
                     .permitAll()
@@ -42,18 +37,26 @@ class SecurityConfig(
                 logout.logoutSuccessUrl("/login?logout=true")
                     .permitAll()
             }
-            .userDetailsService(userDetailService)
+            .csrf { csrf -> csrf.disable() }
 
         return http.build()
     }
 
     @Bean
-    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
-        return authenticationConfiguration.authenticationManager
+    fun passwordEncoder(): PasswordEncoder {
+        return BCryptPasswordEncoder()
     }
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
+    fun authenticationProvider(): DaoAuthenticationProvider {
+        val authProvider = DaoAuthenticationProvider()
+        authProvider.setUserDetailsService(userDetailService)
+        authProvider.setPasswordEncoder(passwordEncoder())
+        return authProvider
+    }
+
+    @Bean
+    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
+        return authenticationConfiguration.authenticationManager // Liefert den globalen AuthenticationManager
     }
 }

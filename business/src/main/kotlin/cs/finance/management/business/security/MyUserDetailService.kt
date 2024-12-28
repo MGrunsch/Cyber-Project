@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 
-@Service
+@Service("userDetailsService")
 class MyUserDetailService(
     private val userRepository: UserRepository
 ) : UserDetailsService {
@@ -21,6 +21,6 @@ class MyUserDetailService(
         val user = userRepository.findByMail(username)
             ?: throw UsernameNotFoundException("User not found with email: $username")
 
-        return MyUserDetails(user, "ROLE_${user.role.name}")
+        return User(user.mail, user.password, listOf(SimpleGrantedAuthority("ROLE_USER")))
     }
 }

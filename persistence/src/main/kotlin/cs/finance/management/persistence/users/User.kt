@@ -28,4 +28,7 @@ data class User(
     @Column(length = 13)
     var role: UserRole = UserRole.USER,
 
-    ) : HasIdOfType<Long>
+    @Column
+    var enabled: Boolean = false
+
+) : HasIdOfType<Long>

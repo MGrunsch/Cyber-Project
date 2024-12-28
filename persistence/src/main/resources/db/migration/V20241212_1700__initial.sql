@@ -5,7 +5,8 @@ CREATE TABLE users
     user_id  bigint       NOT NULL PRIMARY KEY, -- Define user_id as the primary key
     mail     varchar(255) NOT NULL,             -- User's email
     password varchar(500) NOT NULL,             -- Password
-    role     varchar(13) DEFAULT 'MITARBEITER'  -- Userrole
+    role     varchar(13) DEFAULT 'MITARBEITER', -- Userrole
+    enabled  BOOL CHECK (enabled IN (TRUE, FALSE))
 );
 
 CREATE UNIQUE INDEX uq_users_mail ON users (LOWER(mail));
