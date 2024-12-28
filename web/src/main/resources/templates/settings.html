@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Finanzverwaltung - Einstellungen</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <h1>Einstellungen</h1>
+        <nav>
+            <a th:href="@{/dashboard}" class="nav-link">Zurück zum Dashboard</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-content">
+        <section class="settings-section">
+            <h2>Persönliche Daten ändern</h2>
+            <div th:if="${param.success}" class="alert alert-success">
+                <p th:if="${param.success[0] == 'passwordChanged'}">Passwort wurde erfolgreich geändert.</p>
+            </div>
+
+            <div th:if="${param.error}" class="alert alert-danger">
+                <p th:if="${param.error[0] == 'wrongPassword'}">Das aktuelle Passwort ist falsch.</p>
+                <p th:if="${param.error[0] == 'passwordMismatch'}">Die neuen Passwörter stimmen nicht überein.</p>
+            </div>
+
+            <form th:action="@{/settings/changePassword}" method="post">
+                <div class="form-group">
+                    <label>E-Mail:</label>
+                    <input type="email" id="email" name="email" required class="form-input" th:value="${userMail}"
+                           disabled>
+                </div>
+                <div class="form-group">
+                    <label for="currentPassword">Aktuelles Passwort:</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Neues Passwort:</label>
+                    <input type="password" id="newPassword" name="newPassword" required class="form-input">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Passwort bestätigen:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required class="form-input">
+                </div>
+                <button type="submit" class="transfer-button">Passwort ändern</button>
+            </form>
+
+        </section>
+    </main>
+</div>
+</body>
+</html>

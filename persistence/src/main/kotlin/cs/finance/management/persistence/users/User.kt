@@ -4,6 +4,7 @@ import cs.finance.management.persistence.HasIdOfType
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import org.hibernate.annotations.NaturalId
+import java.math.BigDecimal
 
 
 @Entity
@@ -29,6 +30,9 @@ data class User(
     var role: UserRole = UserRole.USER,
 
     @Column
-    var enabled: Boolean = false
+    var enabled: Boolean = false,
+
+    @Column(precision = 10, scale = 2)
+    var budget: BigDecimal = BigDecimal.ZERO
 
 ) : HasIdOfType<Long>

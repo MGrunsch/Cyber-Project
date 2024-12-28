@@ -1,20 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+    <title>Finanzverwaltung - Login</title>
+    <link rel="stylesheet" th:href="@{/css/login_registration.css}">
 </head>
 <body>
-<h2>Login</h2>
-<form th:action="@{/login}" method="post">
-    <div>
-        <input type="text" name="username" placeholder="Username"/>
+<div class="auth-container">
+    <div class="auth-box">
+        <h1 class="auth-title">Finanzverwaltung - Login</h1>
+        <div th:if="${param.error}" class="message error">
+            <p>Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.</p>
+        </div>
+
+        <div th:if="${param.logout}" class="message success">
+            <p>Sie haben sich erfolgreich ausgeloggt!</p>
+        </div>
+
+        <form th:action="@{/login}" method="post" class="auth-form">
+            <div class="form-group">
+                <label for="username">E-Mail:</label>
+                <input type="text" id="username" name="username" required class="form-input"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Passwort:</label>
+                <input type="password" id="password" name="password" required class="form-input"/>
+            </div>
+            <button type="submit" class="auth-button">Anmelden</button>
+        </form>
+
+        <div class="auth-links">
+            <p>Noch kein Konto? <a th:href="@{/register}">Hier registrieren</a></p>
+        </div>
     </div>
-    <div>
-        <input type="password" name="password" placeholder="Password"/>
-    </div>
-    <input type="submit" value="Log in" />
-</form>
+</div>
 </body>
 </html>
