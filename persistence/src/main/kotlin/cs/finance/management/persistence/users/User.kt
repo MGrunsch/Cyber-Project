@@ -4,6 +4,9 @@ import cs.finance.management.persistence.HasIdOfType
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import org.hibernate.annotations.NaturalId
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import java.math.BigDecimal
 
 
@@ -14,16 +17,16 @@ data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
-    override var id: Long = 0,
+    var id: Long = 0,
 
     @NaturalId
     @Column(length = 255)
     @NotBlank
     val mail: String = "",
 
-    @Column(length = 500)
+    @Column(name = "password",length = 500)
     @NotBlank
-    var password: String = "",
+    var passwd: String = "",
 
     @Enumerated(EnumType.STRING)
     @Column(length = 13)
@@ -35,4 +38,19 @@ data class User(
     @Column(precision = 10, scale = 2)
     var budget: BigDecimal = BigDecimal.ZERO
 
-) : HasIdOfType<Long>
+
+
+    // : HasIdOfType<Long>
+) : UserDetails {
+
+    override fun getUsername(): String = mail
+    override fun getPassword(): String = passwd
+    override fun getAuthorities(): Collection<GrantedAuthority> = authorities
+    override fun isAccountNonExpired(): Boolean = true
+    override fun isAccountNonLocked(): Boolean = true
+    override fun isCredentialsNonExpired(): Boolean = true
+    override fun isEnabled(): Boolean = true
+
+    fun getUserId(): Long = id
+
+}

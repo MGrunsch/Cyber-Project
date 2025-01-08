@@ -11,3 +11,10 @@ CREATE TABLE users
 );
 
 CREATE UNIQUE INDEX uq_users_mail ON users (LOWER(mail));
+
+CREATE TABLE login_events (
+    user_id bigint NOT NULL PRIMARY KEY,
+    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ip_address VARCHAR(45),
+    location VARCHAR(100)
+);

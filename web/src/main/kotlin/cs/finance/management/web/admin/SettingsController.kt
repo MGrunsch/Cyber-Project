@@ -39,7 +39,7 @@ class SettingsController(
             return "redirect:/settings?error=passwordMismatch"
         }
 
-        user.password = passwordEncoder.encode(newPassword)
+        user.passwd = passwordEncoder.encode(newPassword)
         userService.save(user)
 
         return "redirect:/settings?success=passwordChanged"

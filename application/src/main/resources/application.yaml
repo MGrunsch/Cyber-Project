@@ -44,4 +44,4 @@ spring:
     validate-on-migrate: true
 
 jwt:
-  secret: 3d7c8a1f5b6e2d9a4c7f0b3e6a9d2c5f8b1e4a7d0c3f6b9e2a5d8c1f4b7a0e3
+  secret: eGVjcbMw5u1A4BcXZfO7Xg0BReZJ7f1Usm64LlWqHryD0xtmP8twnTXtUp7iS3SO

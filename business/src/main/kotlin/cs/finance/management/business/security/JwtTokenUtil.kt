@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.util.*
+import javax.crypto.SecretKey
 
 
 @Component
@@ -15,8 +16,10 @@ class JwtTokenUtil {
     @Value("\${jwt.secret}")
     private lateinit var secret: String
 
+
     private val JWT_EXPIRATION_MS = 86400000 // 24 Stunden
 
+    //fun generateToken(authentication: Authentication): String {
     fun generateToken(authentication: Authentication): String {
         val userPrincipal = authentication.principal as UserDetails
         return Jwts.builder()
