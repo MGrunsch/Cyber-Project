@@ -3,6 +3,59 @@
 <head>
     <title>Finanzverwaltung - Login</title>
     <link rel="stylesheet" th:href="@{/css/login_registration.css}">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const apiClient = axios.create();
+
+        apiClient.interceptors.request.use(config => {
+            console.log("Interceptor aufgerufen");
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                config.headers['Authorization'] = 'Bearer ' + token;
+                console.log("Header:", config.headers);
+            }
+            return config;
+        }, error => {
+            return Promise.reject(error);
+        });
+
+        window.login = function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // API-Aufruf zum Einloggen
+            apiClient.post('/api/auth/signin', { username, password })
+                .then(response => {
+                    console.log('Serverantwort:', response); // Debugging-Zeile
+                    if (response.data.token) {
+                        console.log('Alter JWT Token:', localStorage.getItem('jwtToken'));
+                        localStorage.setItem('jwtToken', response.data.token);
+                        console.log('Neuer JWT Token:', localStorage.getItem('jwtToken'));
+
+
+                        apiClient.get('/dashboard')
+                            .then(response => {
+                                // Hier können Sie den HTML-Inhalt in eine bestimmte DOM-Element einfügen
+                                document.body.innerHTML = response.data; // Setzen Sie den Body-Inhalt auf die zurückgegebene HTML
+                            })
+                            .catch(error => {
+                                console.error('Error beim Zugriff auf das Dashboard:', error);
+                                alert('Zugriff auf das Dashboard fehlgeschlagen');
+                            });
+
+
+                    } else {
+                        alert('Login fehlgeschlagen');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ein Fehler ist aufgetreten');
+                });
+        };
+    </script>
 </head>
 <body>
 <div class="auth-container">
@@ -16,7 +69,7 @@
             <p>Sie haben sich erfolgreich ausgeloggt!</p>
         </div>
 
-        <form id="loginForm" class="auth-form">
+        <form id="loginForm" class="auth-form" onsubmit="login(event)">
             <div class="form-group">
                 <label for="username">E-Mail:</label>
                 <input type="text" id="username" name="username" required class="form-input"/>

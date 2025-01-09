@@ -15,7 +15,7 @@ class AuthTokenFilter(
 ) : OncePerRequestFilter() {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(AuthTokenFilter::class.java)
+        private val loggi = LoggerFactory.getLogger(AuthTokenFilter::class.java)
     }
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
@@ -38,10 +38,7 @@ class AuthTokenFilter(
         filterChain.doFilter(request, response)
     }
 
-    private fun parseJwt(request: HttpServletRequest): String? {
-        val headerAuth = request.getHeader("Authorization")
-        return if (headerAuth?.startsWith("Bearer ") == true) {
-            headerAuth.substring(7)
-        } else null
-    }
+
+    private fun parseJwt(request: HttpServletRequest): String? =
+        request.getHeader("Authorization")?.takeIf { it.startsWith("Bearer ") }?.substring(7)
 }

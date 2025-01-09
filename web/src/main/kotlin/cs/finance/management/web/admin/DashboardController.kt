@@ -5,16 +5,14 @@ import cs.finance.management.business.user.UserService
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import java.math.BigDecimal
 
 @CrossOrigin(origins = ["*"], maxAge = 3600)
 @Controller
-@RequestMapping("/api/test")
 class DashboardController(
-    private val userService: UserService,
-    private val jwtTokenUtil: TokenService
+    private val userService: UserService
 ) {
 
     @GetMapping("/login")
@@ -22,7 +20,6 @@ class DashboardController(
         return "login"
     }
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping("/dashboard")
     fun dashboard(model: Model): String {
         val user = userService.getAuthenticatedUser()
@@ -33,7 +30,7 @@ class DashboardController(
 
         return "dashboard"
     }
-/*
+
     @PostMapping("/transfer")
     fun transferMoney(
         @RequestParam recipientId: Long,
@@ -48,6 +45,4 @@ class DashboardController(
         }
         return "redirect:/dashboard"
     }
- */
-
 }
