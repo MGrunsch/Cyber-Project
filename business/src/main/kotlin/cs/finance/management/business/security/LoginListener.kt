@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 import cs.finance.management.business.user.UserService
 
 
-@Component
+//@Component
 class LoginListener(
     loginEventRepository: LoginEventRepository,
     private val userRepository: UserRepository,

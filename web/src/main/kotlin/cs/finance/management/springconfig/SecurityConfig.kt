@@ -1,6 +1,10 @@
 package cs.finance.management.springconfig
 
+import cs.finance.management.business.security.AuthEntryPointJwt
+import cs.finance.management.business.security.AuthTokenFilter
+import cs.finance.management.business.security.JwtUtils
 import cs.finance.management.business.security.MyUserDetailService
+import cs.finance.management.persistence.users.UserRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -9,63 +13,44 @@ import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 
 @Configuration
+@EnableMethodSecurity
 class SecurityConfig(
-    private val userDetailService: UserDetailsService
+    private val userDetailsService: MyUserDetailService,
+    private val unauthorizedHandler: AuthEntryPointJwt,
+    private val jwtUtils: JwtUtils
 ) {
 
     @Bean
-    fun securityFilterChain(http: HttpSecurity,
-                            jwtAuthenticationFilter: JwtAuthenticationFilter,
-                            authenticationProvider: AuthenticationProvider): SecurityFilterChain {
-        http
-            .csrf { it.disable() }
-            .authorizeHttpRequests { auth ->
-                // Endpunkte für alle freigeben
-                auth.requestMatchers("/login", "/register", "/css/**", "/api/auth/login").permitAll()
-                    .anyRequest().authenticated()
-            }
+    fun authenticationJwtTokenFilter(): AuthTokenFilter {
+        return AuthTokenFilter(jwtUtils, userDetailsService)
+    }
 
-            .sessionManagement { session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
+    @Bean
+    fun authenticationProvider(): DaoAuthenticationProvider {
+        return DaoAuthenticationProvider().apply {
+            setUserDetailsService(userDetailsService)
+            setPasswordEncoder(passwordEncoder())
+        }
+    }
 
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
-
-
-            /*
-            .formLogin { form ->
-                form.loginProcessingUrl("api/auth/login")
-                form.loginPage("/login")
-                    .defaultSuccessUrl("/dashboard", true)
-                    .failureUrl("/login?error=true")
-                    .permitAll()
-
-            }
-
-            .logout { logout ->
-                logout.logoutSuccessUrl("/login?logout=true")
-                    .permitAll()
-
-            }
-
-             */
-
-
-
-
-        return http.build()
+    @Bean
+    fun authenticationManager(http: HttpSecurity): AuthenticationManager {
+        val authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder::class.java)
+        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder())
+        return authenticationManagerBuilder.build()
     }
 
     @Bean
@@ -74,42 +59,23 @@ class SecurityConfig(
     }
 
     @Bean
-    fun authenticationProvider(): DaoAuthenticationProvider {
-        val authProvider = DaoAuthenticationProvider()
-        authProvider.setUserDetailsService(userDetailService)
-        authProvider.setPasswordEncoder(passwordEncoder())
-        return authProvider
-    }
-
-    @Bean
-    fun authenticationManager(http: HttpSecurity): AuthenticationManager {
-        val authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder::class.java)
-        authenticationManagerBuilder.userDetailsService(userDetailService).passwordEncoder(passwordEncoder())
-        return authenticationManagerBuilder.build()
-    }
-
-    /*
-    @Bean
-    fun filterChain(http: HttpSecurity, jwtAuthenticationFilter: JwtAuthenticationFilter,
-                    authenticationProvider: AuthenticationProvider): SecurityFilterChain {
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
+            .exceptionHandling { it.authenticationEntryPoint(unauthorizedHandler) }
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("/api/auth/**").permitAll()
+                auth
+                    .requestMatchers("/css/**").permitAll()
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/test/**").permitAll()
                     .anyRequest().authenticated()
             }
-            .sessionManagement { session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+
+        http.authenticationProvider(authenticationProvider())
+
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
-    }*/
-
-
-
-     */
-    @Bean
-    fun jwtAuthenticationFilter(): JwtAuthenticationFilter = JwtAuthenticationFilter()
+    }
 }

@@ -15,9 +15,9 @@ class WebContext : WebMvcConfigurer {
             .favorParameter(false)
             .parameterName("format")
             .ignoreAcceptHeader(true)
-            .defaultContentType(MediaType.TEXT_HTML)
+            .defaultContentType(MediaType.APPLICATION_JSON)
             .mediaType("xml", MediaType.APPLICATION_XML)
-            .mediaType("json", MediaType.APPLICATION_JSON)
+            .mediaType("html", MediaType.TEXT_HTML)
     }
 
 }

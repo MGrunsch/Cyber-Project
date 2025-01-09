@@ -45,3 +45,5 @@ spring:
 
 jwt:
   secret: eGVjcbMw5u1A4BcXZfO7Xg0BReZJ7f1Usm64LlWqHryD0xtmP8twnTXtUp7iS3SO
+  accessTokenExpiration: 3600000
+

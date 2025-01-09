@@ -3,55 +3,6 @@
 <head>
     <title>Finanzverwaltung - Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const transferForm = document.querySelector('.transfer-form');
-
-            transferForm.addEventListener('submit', function (e) {
-                e.preventDefault(); // Standardformularverhalten verhindern
-
-                const recipientId = document.getElementById('recipient').value;
-                const amount = document.getElementById('amount').value;
-
-                if (!recipientId || !amount) {
-                    alert('Bitte Empfänger und Betrag angeben.');
-                    return;
-                }
-
-                // JWT-Token aus localStorage holen
-                const jwtToken = localStorage.getItem('jwt');
-                if (!jwtToken) {
-                    alert('Fehler: Kein Token vorhanden. Bitte erneut einloggen.');
-                    return;
-                }
-
-                // Daten senden
-                fetch('/transfer', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${jwtToken}`
-                    },
-                    body: JSON.stringify({ recipientId, amount })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Fehler bei der Überweisung: ' + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Erfolgsmeldung anzeigen oder verarbeiten
-                    alert('Überweisung erfolgreich: ' + data.message);
-                    window.location.reload(); // Seite aktualisieren, um neue Daten zu laden
-                })
-                .catch(err => {
-                    console.error('Fehler:', err);
-                    alert('Fehler bei der Überweisung: ' + err.message);
-                });
-            });
-        });
-    </script>
 </head>
 <body>
 <div class="dashboard-container">
