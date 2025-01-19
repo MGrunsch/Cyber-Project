@@ -10,3 +10,9 @@ VALUES
     (8, 'testuser8@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 4500.25),
     (9, 'testuser9@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5000.00),
     (10, 'testuser10@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50);
+
+
+INSERT INTO login_events (user_id, mail, login_time, ip_address, location, browser, browser_version, operating_system, status)
+VALUES
+   (1, 'testuser1@example.com', '2025-01-14 10:14:16.998657', '127.0.0.1', 'Frankfurt', 'TestBrowser', 'TestBVersion', 'TestOpSystem', 'Success'),
+   (1, 'testuser1@example.com', '2025-01-14 10:14:16.998657', '127.0.0.1', 'Frankfurt', 'TestBrowser', 'TestBVersion', 'TestOpSystem', 'Success');

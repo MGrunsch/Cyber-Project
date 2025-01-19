@@ -11,3 +11,17 @@ CREATE TABLE users
 );
 
 CREATE UNIQUE INDEX uq_users_mail ON users (LOWER(mail));
+
+
+CREATE TABLE login_events (
+    id BIGSERIAL PRIMARY KEY,       -- Auto-increment ID
+    user_id BIGINT NOT NULL,        -- User ID
+    mail VARCHAR(255),              -- mail
+    login_time TIMESTAMP NOT NULL,  -- Zeitpunkt des Logins
+    ip_address VARCHAR(255),        -- IP-Adresse des Nutzers
+    location VARCHAR(255),          -- Standort des Nutzers
+    browser VARCHAR(255),           -- Browser des Nutzers
+    browser_version VARCHAR(255),    -- Browser Version des Nutzers
+    operating_system VARCHAR(255),    -- Betriebssystem des Nutzers
+    status VARCHAR(255)             -- Status ob Authentifizierung erfolgreich war, oder nicht
+);
