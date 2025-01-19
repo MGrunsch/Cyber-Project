@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Finanzverwaltung - Login</title>
+    <title>Finanzverwaltung</title>
     <link rel="stylesheet" th:href="@{/css/login_registration.css}">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         const apiClient = axios.create();
 
         apiClient.interceptors.request.use(config => {
-            console.log("Interceptor aufgerufen");
             const token = localStorage.getItem('jwtToken');
             if (token) {
                 config.headers['Authorization'] = 'Bearer ' + token;
-                console.log("Header:", config.headers);
             }
             return config;
         }, error => {
@@ -25,20 +23,14 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // API-Aufruf zum Einloggen
             apiClient.post('/api/auth/signin', { username, password })
                 .then(response => {
-                    console.log('Serverantwort:', response); // Debugging-Zeile
                     if (response.data.token) {
-                        console.log('Alter JWT Token:', localStorage.getItem('jwtToken'));
                         localStorage.setItem('jwtToken', response.data.token);
-                        console.log('Neuer JWT Token:', localStorage.getItem('jwtToken'));
-
 
                         apiClient.get('/dashboard')
                             .then(response => {
-                                // Hier können Sie den HTML-Inhalt in eine bestimmte DOM-Element einfügen
-                                document.body.innerHTML = response.data; // Setzen Sie den Body-Inhalt auf die zurückgegebene HTML
+                                navigateTo("/dashboard")
                             })
                             .catch(error => {
                                 console.error('Error beim Zugriff auf das Dashboard:', error);
@@ -55,9 +47,56 @@
                     alert('Ein Fehler ist aufgetreten');
                 });
         };
+
+        function navigateTo(url) {
+            apiClient.get(url)
+                .then(response => {
+                    document.querySelector('.main-content').innerHTML = response.data; // Nur den Inhalt ersetzen
+                })
+                .catch(error => {
+                    console.error('Error beim Navigieren:', error);
+                    if (error.response && error.response.status === 401) {
+                        window.location.href = '/finance-management';
+                    } else {
+                        alert('Navigation fehlgeschlagen');
+                    }
+                });
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A' && e.target.getAttribute('href')) {
+                e.preventDefault();
+                navigateTo(e.target.getAttribute('href'));
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('jwtToken');
+            window.location.href = '/finance-management';
+        }
+
+        function transferMoney() {
+            const recipientId = document.getElementById('recipient').value;
+            const amount = document.getElementById('amount').value;
+
+            console.log('Überweisung:', { recipientId, amount });
+            console.log('Aktueller Token:', localStorage.getItem('jwtToken')); // Debugging-Log
+
+            apiClient.post('/api/auth/transfer', { recipientId, amount })
+                .then(response => {
+                    console.log('Überweisung erfolgreich:', response.data);
+                    navigateTo('/dashboard');
+                })
+                .catch(error => {
+                    console.error('Error bei der Überweisung:', error);
+                    alert('Überweisung fehlgeschlagen');
+                });
+        }
     </script>
 </head>
 <body>
+<main class="main-content">
+
 <div class="auth-container">
     <div class="auth-box">
         <h1 class="auth-title">Finanzverwaltung - Login</h1>
@@ -86,5 +125,6 @@
         </div>
     </div>
 </div>
+</main>
 </body>
 </html>

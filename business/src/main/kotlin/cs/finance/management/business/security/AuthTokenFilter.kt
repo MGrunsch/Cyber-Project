@@ -29,15 +29,15 @@ class AuthTokenFilter(
                     )
                     authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
                     SecurityContextHolder.getContext().authentication = authentication
+                    logger.info("Set authentication for user: $username")
                 }
             }
         } catch (e: Exception) {
-            e
+            logger.error("Cannot set user authentication: ${e.message}", e)
         }
 
         filterChain.doFilter(request, response)
     }
-
 
     private fun parseJwt(request: HttpServletRequest): String? =
         request.getHeader("Authorization")?.takeIf { it.startsWith("Bearer ") }?.substring(7)

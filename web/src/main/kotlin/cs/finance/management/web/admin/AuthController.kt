@@ -8,6 +8,7 @@ import cs.finance.management.persistence.jwt.RefreshTokenRequest
 import cs.finance.management.persistence.jwt.TokenResponse
 import cs.finance.management.web.admin.model.JwtResponse
 import cs.finance.management.web.admin.model.LoginRequest
+import cs.finance.management.web.admin.model.TransferRequest
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
@@ -16,11 +17,13 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
+import java.math.BigDecimal
 
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
     private val authenticationManager: AuthenticationManager,
+    private val userService: UserService,
     private val jwtUtils: JwtUtils
 ) {
 
@@ -43,5 +46,13 @@ class AuthController(
                 roles = roles
             )
         )
+    }
+
+    @PostMapping("/transfer")
+    fun transferMoney(
+        @Valid @RequestBody transferRequest: TransferRequest
+    ): String {
+        userService.transferMoney(transferRequest.recipientId, transferRequest.amount)
+        return "redirect:/dashboard"
     }
 }

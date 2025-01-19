@@ -60,9 +60,8 @@ class SecurityConfig(
             .authorizeHttpRequests { auth ->
                 auth
                     .requestMatchers("/css/**", "/js/**", "/favicon.ico").permitAll()
-                    .requestMatchers("/login").permitAll()
+                    .requestMatchers("/finance-management", "/register").permitAll()
                     .requestMatchers("/api/auth/**").permitAll()
-                    .requestMatchers("/dashboard").authenticated()
                     .anyRequest().authenticated()
             }
 
@@ -71,5 +70,4 @@ class SecurityConfig(
 
         return http.build()
     }
-
 }

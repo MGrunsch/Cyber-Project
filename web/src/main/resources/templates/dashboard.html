@@ -3,14 +3,15 @@
 <head>
     <title>Finanzverwaltung - Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <div class="dashboard-container">
     <header class="dashboard-header">
         <h1>Finanzverwaltung Dashboard</h1>
         <nav>
-            <a th:href="@{/settings}" class="nav-link">Einstellungen</a>
-            <a th:href="@{/logout}" class="nav-link">Logout</a>
+            <a href="/settings" class="nav-link">Einstellungen</a>
+            <a href="#" class="nav-link" onclick="logout()">Logout</a>
         </nav>
     </header>
 
@@ -30,11 +31,10 @@
                 <p th:text="${errorMessage}"></p>
             </div>
 
-            <form class="transfer-form">
-                <!-- Formulardaten werden per JavaScript verarbeitet -->
+            <form class="transfer-form" onsubmit="event.preventDefault(); transferMoney();">
                 <div class="form-group">
                     <label for="recipient">Empfänger:</label>
-                    <select id="recipient" name="recipientId" required class="form-input">
+                    <select id="recipient" name="recipient" required class="form-input">
                         <option value="">Bitte wählen Sie einen Empfänger</option>
                         <option th:each="selectedUser : ${allUsers}"
                                 th:if="${selectedUser.id != user.id}"

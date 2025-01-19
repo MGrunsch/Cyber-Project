@@ -1,6 +1,5 @@
 package cs.finance.management.web.admin
 
-import cs.finance.management.business.security.TokenService
 import cs.finance.management.business.user.UserService
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
@@ -15,9 +14,14 @@ class DashboardController(
     private val userService: UserService
 ) {
 
-    @GetMapping("/login")
+    @GetMapping("finance-management")
     fun allAccess(): String {
         return "login"
+    }
+
+    @GetMapping("/register")
+    fun registerPage(): String {
+        return "registration"
     }
 
     @GetMapping("/dashboard")
@@ -29,20 +33,5 @@ class DashboardController(
         model.addAttribute("allUsers", allUsers)
 
         return "dashboard"
-    }
-
-    @PostMapping("/transfer")
-    fun transferMoney(
-        @RequestParam recipientId: Long,
-        @RequestParam amount: BigDecimal,
-        redirectAttributes: RedirectAttributes
-    ): String {
-        try {
-            userService.transferMoney(recipientId, amount)
-            redirectAttributes.addFlashAttribute("successMessage", "Überweisung erfolgreich durchgeführt.")
-        } catch (e: Exception) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.message)
-        }
-        return "redirect:/dashboard"
     }
 }
