@@ -1,5 +1,6 @@
 package cs.finance.management.web.admin
 
+import cs.finance.management.business.logic.BehaviourAnalysis
 import cs.finance.management.business.security.JwtUtils
 import cs.finance.management.business.user.UserService
 import cs.finance.management.persistence.jwt.AuthenticationRequest
@@ -8,6 +9,7 @@ import cs.finance.management.persistence.jwt.RefreshTokenRequest
 import cs.finance.management.persistence.jwt.TokenResponse
 import cs.finance.management.web.admin.model.JwtResponse
 import cs.finance.management.web.admin.model.LoginRequest
+import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
@@ -17,20 +19,26 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 
+
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
     private val authenticationManager: AuthenticationManager,
-    private val jwtUtils: JwtUtils
+    private val jwtUtils: JwtUtils,
+    private val behaviourAnalysis: BehaviourAnalysis
 ) {
 
     @PostMapping("/signin")
-    fun authenticateUser(@Valid @RequestBody loginRequest: LoginRequest): ResponseEntity<*> {
+    fun authenticateUser(@Valid @RequestBody loginRequest: LoginRequest, request: HttpServletRequest): ResponseEntity<*> {
         val authentication = authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
         )
 
         SecurityContextHolder.getContext().authentication = authentication
+
+
+        val riskScore = behaviourAnalysis.calculateRiskScore(request)
+
         val jwt = jwtUtils.generateJwtToken(authentication)
 
         val userDetails = authentication.principal as UserDetails

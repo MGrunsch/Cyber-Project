@@ -17,7 +17,7 @@ data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
-    var id: Long = 0,
+    override var id: Long = 0,
 
     @NaturalId
     @Column(length = 255)
@@ -26,7 +26,7 @@ data class User(
 
     @Column(name = "password",length = 500)
     @NotBlank
-    var passwd: String = "",
+    var password: String = "",
 
     @Enumerated(EnumType.STRING)
     @Column(length = 13)
@@ -39,9 +39,10 @@ data class User(
     var budget: BigDecimal = BigDecimal.ZERO
 
 
+) : HasIdOfType<Long>
 
-    // : HasIdOfType<Long>
-) : UserDetails {
+
+    /*: UserDetails {
 
     override fun getUsername(): String = mail
     override fun getPassword(): String = passwd
@@ -51,6 +52,5 @@ data class User(
     override fun isCredentialsNonExpired(): Boolean = true
     override fun isEnabled(): Boolean = true
 
-    fun getUserId(): Long = id
 
-}
+}*/

@@ -9,8 +9,11 @@ import java.time.LocalDateTime
 class LoginEvent {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
+
+    var id: Long? = 3
+
     var userId: Long = 1
 
     @Column(nullable = false)
@@ -19,5 +22,15 @@ class LoginEvent {
     var ipAddress: String = ""
 
     var location: String? = null
+
+    var mail: String = ""
+
+    var browser : String? = ""
+
+    var browserVersion : String? = ""
+
+    var operatingSystem : String? = ""
+
+    var status = ""
 
 }
