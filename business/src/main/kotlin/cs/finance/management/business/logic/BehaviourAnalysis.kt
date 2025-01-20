@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import kotlin.math.log
 
-
+@Service
 class BehaviourAnalysis (
     private val userService: UserService,
     private val loginService: LoginService
@@ -74,17 +74,18 @@ class BehaviourAnalysis (
 
     // Ermitteln eines Risikowertes, basierend auf vorhandenen Daten wie IP Adresse, Anzahl der
     // fehlgeschlagenen Anmeldeversuche, Abweichungen von der normalen Login Zeit, Browser Daten und Betriebssystem
-    fun calculateRiskScore(request: HttpServletRequest): Int {
-        val user = userService.getAuthenticatedUser()
+    fun calculateRiskScore(request: HttpServletRequest, username: String): Int {
+        val user = userService.findByMail(username) ?: return 100 // Höchstes Risiko, wenn Benutzer nicht gefunden
+
         var riskScore = 0
-        val ipAdress = request.remoteAddr
+        val ipAddress = request.remoteAddr
         val userAgent = request.getHeader("User-Agent") ?: "Unknown"
         val browserDetails = analyzeUserAgent(userAgent)
-        riskScore = checkIpAdress(ipAdress, riskScore)
+
+        riskScore = checkIpAdress(ipAddress, riskScore)
         riskScore = getFailedLoginAttempts(riskScore)
         riskScore = checkLoginTime(riskScore, user.id)
         riskScore = checkBrowserConsistency(riskScore, user.id, browserDetails)
-
 
         return riskScore
     }

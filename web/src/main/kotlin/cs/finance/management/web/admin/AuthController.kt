@@ -21,6 +21,7 @@ class AuthController(
     private val authenticationManager: AuthenticationManager,
     private val userService: UserService,
     private val jwtUtils: JwtUtils,
+    private val behaviourAnalysis: BehaviourAnalysis,
 ) {
 
     @PostMapping("/signin")
@@ -31,13 +32,12 @@ class AuthController(
 
         SecurityContextHolder.getContext().authentication = authentication
 
-
-        //val riskScore = behaviourAnalysis.calculateRiskScore(request)
-
-        val jwt = jwtUtils.generateJwtToken(authentication)
-
         val userDetails = authentication.principal as UserDetails
         val roles = userDetails.authorities.map { it.authority }
+
+        val riskScore = behaviourAnalysis.calculateRiskScore(request, loginRequest.username)
+
+        val jwt = jwtUtils.generateJwtToken(authentication)
 
         return ResponseEntity.ok(
             JwtResponse(

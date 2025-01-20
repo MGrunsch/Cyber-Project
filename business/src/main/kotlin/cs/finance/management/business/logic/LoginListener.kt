@@ -14,7 +14,7 @@ import org.springframework.context.ApplicationEvent
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent
 
 
-
+@Component
 class LoginListener(
     loginEventRepository: LoginEventRepository,
     private val userRepository: UserRepository,
@@ -31,8 +31,9 @@ class LoginListener(
         when (event){
             is AuthenticationSuccessEvent -> {
                 val ipAddress = request.remoteAddr
-                val user = userService.getAuthenticatedUser()
-                val mail = user.mail
+                val userName = event.authentication.name
+                val user = userRepository.findByMail(userName)
+                val mail = user!!.mail
                 val id = user.id
                 val userAgent = request.getHeader("User-Agent") ?: "Unknown"
                 val userAgentParsed = behaviourAnalysis.analyzeUserAgent(userAgent)
