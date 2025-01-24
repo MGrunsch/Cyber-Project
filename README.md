@@ -15,13 +15,7 @@ TODOs:
 
 **Aus der Anforderungsanalyse:**
 
-5. Impementierung HTTPS
-
-6. Schutz vor Cross-Site Scripting (XSS), um das Auslesen von Tokens zu verhindern
-
-7. Super Admin und Admins erstellen
-
-8. Möglichkeit zur Speicherung vertrauenswürdiger Geräte.
+6. Userrollen implementieren
 
 9. Mehr Benutzermeldungen implementieren (Punkt Transparenz)
 
@@ -31,7 +25,7 @@ TODOs:
 
 12. Adaptive MFA (Sicherheitsfragen)
 
-13. Biometrische Auth
+13. Biometrische Auth simulieren
 
 14. Hardware Token
 
