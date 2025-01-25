@@ -4,9 +4,9 @@ TODOs:
 
 1. Paper lesen -> Marc + Chris
   
-2. Riskcore mit Papern vergleichen -> Chris
+2. Riskcore mit Papern vergleichen 
 -> Uhrzeit und Wochentag
--> Zeitfenster überprüfen
+-> Zeitfenster überprüfen -> Chris
 
 3. Überweisungshistorie implementieren -> Marc
 
@@ -26,9 +26,7 @@ TODOs:
 
 12. Adaptive MFA (Sicherheitsfragen) -> Chris
 
-13. Biometrische Auth simulieren
-
-14. Hardware Token 
+14. Hardware Token -> Marc
 
 15. Szenarien abdecken
 
