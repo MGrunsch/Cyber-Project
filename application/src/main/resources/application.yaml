@@ -43,7 +43,13 @@ spring:
     baseline-on-migrate: true
     validate-on-migrate: true
 
+  sendgrid:
+    api-key:
+    from-email: marc-grunwald97@web.de
+    from-name: Finance-Management-Team
+
 jwt:
   secret: eGVjcbMw5u1A4BcXZfO7Xg0BReZJ7f1Usm64LlWqHryD0xtmP8twnTXtUp7iS3SO
   accessTokenExpiration: 86400000 # 24 Stunden
+
 

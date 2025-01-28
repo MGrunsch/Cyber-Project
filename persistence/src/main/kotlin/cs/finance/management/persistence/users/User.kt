@@ -1,13 +1,13 @@
 package cs.finance.management.persistence.users
 
-import cs.finance.management.persistence.HasIdOfType
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import org.hibernate.annotations.NaturalId
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.math.BigDecimal
+import java.time.Instant
+import java.util.Date
 
 
 @Entity
@@ -36,7 +36,13 @@ data class User(
     var enabled: Boolean = false,
 
     @Column(precision = 10, scale = 2)
-    var budget: BigDecimal = BigDecimal.ZERO
+    var budget: BigDecimal = BigDecimal.ZERO,
+
+    @Column(name = "one_time_password")
+    var oneTimePassword: String = "",
+
+    @Column(name = "otp_request_time")
+    var otpRequestTime: Date = Date.from(Instant.now().plusSeconds(600)),
 
 
 

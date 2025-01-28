@@ -25,19 +25,14 @@
 
             apiClient.post('/api/auth/signin', { username, password })
                 .then(response => {
-                    if (response.data.token) {
-                        localStorage.setItem('jwtToken', response.data.token);
-
-                        apiClient.get('/dashboard')
-                            .then(response => {
-                                navigateTo("/dashboard")
-                            })
-                            .catch(error => {
-                                console.error('Error beim Zugriff auf das Dashboard:', error);
-                                alert('Zugriff auf das Dashboard fehlgeschlagen');
-                            });
-
-
+                    console.log(response)
+                    if (response.data.requireOTP) {
+                        console.log("Otp required")
+                        document.getElementById('otpField').style.display = 'block';
+                        document.getElementById('loginButton').style.display = 'none';
+                        document.getElementById('otpButton').style.display = 'block';
+                    } else if (response.data.token) {
+                        handleSuccessfulLogin(response.data.token);
                     } else {
                         alert('Login fehlgeschlagen');
                     }
@@ -47,6 +42,29 @@
                     alert('Ein Fehler ist aufgetreten');
                 });
         };
+
+        function verifyOTP() {
+            const username = document.getElementById('username').value;
+            const otp = document.getElementById('otp').value;
+
+            apiClient.post('/api/auth/verify-otp', { username, otp })
+                .then(response => {
+                    if (response.data.token) {
+                        handleSuccessfulLogin(response.data.token);
+                    } else {
+                        alert('OTP-Verifizierung fehlgeschlagen');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('OTP-Verifizierung fehlgeschlagen');
+                });
+        }
+
+        function handleSuccessfulLogin(token) {
+            localStorage.setItem('jwtToken', token);
+            navigateTo("/dashboard");
+        }
 
         function navigateTo(url) {
             apiClient.get(url)
@@ -96,35 +114,39 @@
 </head>
 <body>
 <main class="main-content">
-
-<div class="auth-container">
-    <div class="auth-box">
-        <h1 class="auth-title">Finanzverwaltung - Login</h1>
-        <div th:if="${param.error}" class="message error">
-            <p>Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.</p>
-        </div>
-
-        <div th:if="${param.logout}" class="message success">
-            <p>Sie haben sich erfolgreich ausgeloggt!</p>
-        </div>
-
-        <form id="loginForm" class="auth-form" onsubmit="login(event)">
-            <div class="form-group">
-                <label for="username">E-Mail:</label>
-                <input type="text" id="username" name="username" required class="form-input"/>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1 class="auth-title">Finanzverwaltung - Login</h1>
+            <div th:if="${param.error}" class="message error">
+                <p>Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.</p>
             </div>
-            <div class="form-group">
-                <label for="password">Passwort:</label>
-                <input type="password" id="password" name="password" required class="form-input"/>
-            </div>
-            <button type="submit" class="auth-button">Anmelden</button>
-        </form>
 
-        <div class="auth-links">
-            <p>Noch kein Konto? <a th:href="@{/register}">Hier registrieren</a></p>
+            <div th:if="${param.logout}" class="message success">
+                <p>Sie haben sich erfolgreich ausgeloggt!</p>
+            </div>
+
+            <form id="loginForm" class="auth-form" onsubmit="login(event)">
+                <div class="form-group">
+                    <label for="username">E-Mail:</label>
+                    <input type="text" id="username" name="username" required class="form-input"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Passwort:</label>
+                    <input type="password" id="password" name="password" required class="form-input"/>
+                </div>
+                <div id="otpField" style="display: none;" class="form-group">
+                    <label for="otp">One-Time Password:</label>
+                    <input type="text" id="otp" name="otp" class="form-input"/>
+                </div>
+                <button id="loginButton" type="submit" class="auth-button">Anmelden</button>
+                <button id="otpButton" type="button" onclick="verifyOTP()" style="display: none;" class="auth-button">OTP verifizieren</button>
+            </form>
+
+            <div class="auth-links">
+                <p>Noch kein Konto? <a th:href="@{/register}">Hier registrieren</a></p>
+            </div>
         </div>
     </div>
-</div>
 </main>
 </body>
 </html>
