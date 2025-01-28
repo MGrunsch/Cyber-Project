@@ -54,4 +54,10 @@ class UserService(
     fun getTransactionHistory(user: User): List<Transaction> {
         return transactionRepository.findBySenderOrRecipientOrderByTimestampDesc(user, user)
     }
+
+    fun getCurrentUserPhoneNumber(): String? {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val username = authentication.name
+        return userRepository.findByMail(username)?.phoneNumber
+    }
 }

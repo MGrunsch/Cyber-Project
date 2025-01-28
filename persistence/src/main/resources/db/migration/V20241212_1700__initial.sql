@@ -10,7 +10,9 @@ CREATE TABLE users
     enabled           BOOL CHECK (enabled IN (TRUE, FALSE)), -- User status
     budget            DECIMAL(10, 2) DEFAULT 0.00,           --User's budget
     one_time_password VARCHAR(64),                           --User OTP
-    otp_request_time  TIMESTAMP without time zone            --User's request time for the OTP
+    otp_request_time  TIMESTAMP without time zone,           --User's request time for the OTP
+    otp_expiry_time   TIMESTAMP without time zone,           -- OTP expiry date
+    phone_number      VARCHAR(20)                            --User's phone number
 );
 
 CREATE UNIQUE INDEX uq_users_mail ON users (LOWER(mail));

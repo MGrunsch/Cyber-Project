@@ -27,12 +27,21 @@
                 .then(response => {
                     console.log(response)
                     if (response.data.requireOTP) {
-                        console.log("Otp required")
                         document.getElementById('otpField').style.display = 'block';
                         document.getElementById('loginButton').style.display = 'none';
                         document.getElementById('otpButton').style.display = 'block';
-                        document.getElementById('otpSentMessage').style.display = 'block';
                         document.getElementById('wrongPasswordMessage').style.display = 'none';
+
+                        if (response.data.phoneNumber) {
+                            // SMS OTP
+                            document.getElementById('otpPhoneMessage').style.display = 'block';
+                            document.getElementById('userPhoneNumber').textContent = response.data.phoneNumber;
+                            document.getElementById('otpSentMessage').style.display = 'none';
+                        } else {
+                            // E-Mail OTP
+                            document.getElementById('otpSentMessage').style.display = 'block';
+                            document.getElementById('otpPhoneMessage').style.display = 'none';
+                        }
                     } else if (response.data.token) {
                         handleSuccessfulLogin(response.data.token);
                     } else {
@@ -137,6 +146,9 @@
                 <p>OTP-Verifizierung fehlgeschlagen</p>
             </div>
 
+            <div id="otpPhoneMessage" class="message message-info" style="display: none;">
+                <p>Ein Einmal-Passwort wurde an Ihre Telefonnummer <span id="userPhoneNumber"></span> gesendet.</p>
+            </div>
 
             <form id="loginForm" class="auth-form" onsubmit="login(event)">
                 <div class="form-group">

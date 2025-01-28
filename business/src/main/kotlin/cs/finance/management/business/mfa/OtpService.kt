@@ -22,6 +22,7 @@ class OtpService(
 
         user.oneTimePassword = encodedOTP
         user.otpRequestTime = Date.from(Instant.now().plusSeconds(1200))
+        user.otpExpiryTime = Date(System.currentTimeMillis() + 10 * 60 * 1000)
 
         userRepository.save(user)
 
@@ -30,15 +31,8 @@ class OtpService(
 
     fun validateOTP(userName: String, otpCode: String): Boolean {
         val user = userRepository.findByMail(userName) ?: return false
-        if (user.otpRequestTime.before(Date())) return false
+        if (user.otpExpiryTime?.before(Date()) == true) return false
         return passwordEncoder.matches(otpCode, user.oneTimePassword)
-    }
-
-
-    fun clearOTP(userName: String) {
-        val user = userRepository.findByMail(userName)!!
-        user.oneTimePassword = ""
-        user.otpRequestTime = Date()
     }
 
     fun generateAlphanumericOTP(length: Int = 8): String {

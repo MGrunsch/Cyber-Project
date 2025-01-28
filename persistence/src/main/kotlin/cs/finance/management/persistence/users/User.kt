@@ -44,7 +44,11 @@ data class User(
     @Column(name = "otp_request_time")
     var otpRequestTime: Date = Date.from(Instant.now().plusSeconds(600)),
 
+    @Column(name = "otp_expiry_time")
+    var otpExpiryTime: Date? = null,
 
+    @Column(name = "phone_number", length = 20)
+    var phoneNumber: String = "",
 
     // : HasIdOfType<Long>
 ) : UserDetails {

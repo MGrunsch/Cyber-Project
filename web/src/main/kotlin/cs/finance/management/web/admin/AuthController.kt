@@ -42,7 +42,17 @@ class AuthController(
         val userDetails = authentication.principal as UserDetails
         val riskScore = behaviourAnalysis.calculateRiskScore(request, loginRequest.username)
 
-        if (riskScore >= 20) {
+        if (riskScore >= 20 ) {
+            otpService.generateOneTimePassword(loginRequest.username)
+            val phoneNumber = userService.getCurrentUserPhoneNumber()
+            val maskedPhoneNumber = maskPhoneNumber(phoneNumber ?: "")
+            return ResponseEntity.ok(mapOf(
+                "requireOTP" to true,
+                "phoneNumber" to maskedPhoneNumber
+            ))
+        }
+
+        if (riskScore in 10..20) {
             mailService.sendOTPEmail(loginRequest.username)
             return ResponseEntity.ok(mapOf("requireOTP" to true))
         }
@@ -88,5 +98,9 @@ class AuthController(
     ): String {
         userService.transferMoney(transferRequest.recipientId, transferRequest.amount)
         return "redirect:/dashboard"
+    }
+
+    private fun maskPhoneNumber(phoneNumber: String): String {
+        return phoneNumber.takeLast(4).padStart(phoneNumber.length, '*')
     }
 }
