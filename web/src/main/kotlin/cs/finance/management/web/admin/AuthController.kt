@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -42,7 +43,19 @@ class AuthController(
         val userDetails = authentication.principal as UserDetails
         val riskScore = behaviourAnalysis.calculateRiskScore(request, loginRequest.username)
 
-        if (riskScore >= 20 ) {
+        if (riskScore != null) {
+            return ResponseEntity.ok(mapOf(
+                "requirePushNot" to true,
+                "pushNotificationUrl" to "/api/auth/push-notification?username=${loginRequest.username}"
+            ))
+        }
+
+        if (riskScore in 10..20) {
+            mailService.sendOTPEmail(loginRequest.username)
+            return ResponseEntity.ok(mapOf("requireOTP" to true))
+        }
+
+        if (riskScore in 20.. 100) {
             otpService.generateOneTimePassword(loginRequest.username)
             val phoneNumber = userService.getCurrentUserPhoneNumber()
             val maskedPhoneNumber = maskPhoneNumber(phoneNumber ?: "")
@@ -50,11 +63,6 @@ class AuthController(
                 "requireOTP" to true,
                 "phoneNumber" to maskedPhoneNumber
             ))
-        }
-
-        if (riskScore in 10..20) {
-            mailService.sendOTPEmail(loginRequest.username)
-            return ResponseEntity.ok(mapOf("requireOTP" to true))
         }
 
         val jwt = jwtUtils.generateJwtToken(authentication)

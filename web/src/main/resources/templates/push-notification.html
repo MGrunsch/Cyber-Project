@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Finanzverwaltung - Push Notification</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <script>
+        function confirmPush() {
+            const username = document.getElementById('username').value;
+            fetch('/api/auth/confirm-push?username=' + username, {
+                method: 'POST'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        window.opener.handlePushConfirmation(true, data.token);
+                        window.close();
+                    } else {
+                        alert('Bestätigung fehlgeschlagen');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ein Fehler ist aufgetreten');
+                });
+        }
+    </script>
+</head>
+<body>
+<h1>Push-Benachrichtigung für <span th:text="${username}"></span></h1>
+<input type="hidden" id="username" th:value="${username}">
+<button onclick="confirmPush()">Bestätigen</button>
+</body>
+</html>
