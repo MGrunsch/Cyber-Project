@@ -8,7 +8,7 @@ TODOs:
 -> Uhrzeit und Wochentag
 -> Zeitfenster überprüfen -> Chris
 
-3. Überweisungshistorie implementieren -> Marc
+3. Überweisungshistorie implementieren -> Marc DONE
 
 4. Doku schreiben -> Chris + Marc
 
