@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Finanzverwaltung - Historie</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <h1>Transaktionshistorie</h1>
+        <nav>
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/settings" class="nav-link">Einstellungen</a>
+            <a href="#" class="nav-link" onclick="logout()">Logout</a>
+        </nav>
+    </header>
+
+    <main class="dashboard-content">
+        <section class="history-section">
+            <table class="history-table">
+                <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Typ</th>
+                    <th>Von/An</th>
+                    <th>Betrag</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="transaction : ${transactions}">
+                    <td th:text="${#temporals.format(transaction.timestamp, 'dd.MM.yyyy HH:mm')}"></td>
+                    <td th:if="${transaction.sender != null}" th:text="${transaction.sender.mail}">Unbekannt</td>
+                    <td th:if="${transaction.recipient != null}" th:text="${transaction.recipient.mail}">Unbekannt</td>
+                    <td th:if="${transaction.amount != null}" th:text="${#numbers.formatDecimal(transaction.amount, 1, 2)} + ' €'"></td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+</body>
+</html>

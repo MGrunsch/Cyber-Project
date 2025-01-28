@@ -1,4 +1,5 @@
 CREATE SEQUENCE users_seq START WITH 10050 INCREMENT BY 50;
+CREATE SEQUENCE transactions_seq START WITH 10050 INCREMENT BY 50;
 
 CREATE TABLE users
 (
@@ -9,7 +10,7 @@ CREATE TABLE users
     enabled           BOOL CHECK (enabled IN (TRUE, FALSE)), -- User status
     budget            DECIMAL(10, 2) DEFAULT 0.00,           --User's budget
     one_time_password VARCHAR(64),                           --User OTP
-    otp_request_time  TIMESTAMP without time zone           --User's request time for the OTP
+    otp_request_time  TIMESTAMP without time zone            --User's request time for the OTP
 );
 
 CREATE UNIQUE INDEX uq_users_mail ON users (LOWER(mail));
@@ -27,4 +28,15 @@ CREATE TABLE login_events
     browser_version  VARCHAR(255),          -- Browser Version des Nutzers
     operating_system VARCHAR(255),          -- Betriebssystem des Nutzers
     status           VARCHAR(255)           -- Status ob Authentifizierung erfolgreich war, oder nicht
+);
+
+CREATE TABLE transactions
+(
+    id           BIGSERIAL PRIMARY KEY,   -- Auto-increment ID
+    sender_id    BIGINT         NOT NULL, -- ID des Senders
+    recipient_id BIGINT         NOT NULL, -- ID des Empfängers
+    amount       DECIMAL(10, 2) NOT NULL, -- Überweisungsbetrag
+    timestamp    TIMESTAMP DEFAULT NOW(), -- Zeitpunkt der Transaktion
+    FOREIGN KEY (sender_id) REFERENCES users (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (recipient_id) REFERENCES users (user_id) ON DELETE CASCADE
 );

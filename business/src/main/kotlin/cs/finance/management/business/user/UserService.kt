@@ -1,5 +1,7 @@
 package cs.finance.management.business.user
 
+import cs.finance.management.persistence.transactions.Transaction
+import cs.finance.management.persistence.transactions.TransactionRepository
 import cs.finance.management.persistence.users.User
 import cs.finance.management.persistence.users.UserRepository
 import org.springframework.security.core.context.SecurityContextHolder
@@ -9,7 +11,8 @@ import java.math.BigDecimal
 
 @Service
 class UserService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val transactionRepository: TransactionRepository
 ) {
 
     fun save(user: User): User {
@@ -43,5 +46,12 @@ class UserService(
 
         userRepository.save(sender)
         userRepository.save(recipient)
+
+        val transaction = Transaction(sender = sender, recipient = recipient, amount = amount)
+        transactionRepository.save(transaction)
+    }
+
+    fun getTransactionHistory(user: User): List<Transaction> {
+        return transactionRepository.findBySenderOrRecipientOrderByTimestampDesc(user, user)
     }
 }
