@@ -18,3 +18,16 @@ INSERT INTO login_events (user_id, mail, login_time, ip_address, location, brows
 VALUES
    (1, 'testuser1@example.com', '2025-01-14 10:14:16.998657', '127.0.0.1', 'Frankfurt', 'TestBrowser', 'TestBVersion', 'TestOpSystem', 'Success'),
    (1, 'testuser1@example.com', '2025-01-14 10:14:16.998657', '127.0.0.1', 'Frankfurt', 'TestBrowser', 'TestBVersion', 'TestOpSystem', 'Success');
+
+INSERT INTO transactions (sender_id, recipient_id, amount, timestamp)
+VALUES
+    (1, 2, 100.00, '2025-01-14 10:00:00'),
+    (2, 3, 200.50, '2025-01-14 11:00:00'),
+    (3, 4, 300.75, '2025-01-14 12:00:00'),
+    (4, 5, 400.25, '2025-01-14 13:00:00'),
+    (5, 6, 500.00, '2025-01-14 14:00:00'),
+    (6, 7, 600.50, '2025-01-14 15:00:00'),
+    (7, 8, 700.75, '2025-01-14 16:00:00'),
+    (8, 9, 800.25, '2025-01-14 17:00:00'),
+    (9, 10, 900.50, '2025-01-14 18:00:00'),
+    (10, 1, 1000.75, '2025-01-14 19:00:00');
