@@ -20,7 +20,7 @@ TODOs:
 
 9. Mehr Benutzermeldungen implementieren (Punkt Transparenz) -> Marc DONE
 
-10. Token Löschung -> Marc
+10. Token Löschung -> Marc DONE
 
 11. SMS OTP -> Marc
 
