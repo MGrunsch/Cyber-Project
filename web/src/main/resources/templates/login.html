@@ -31,6 +31,8 @@
                         document.getElementById('otpField').style.display = 'block';
                         document.getElementById('loginButton').style.display = 'none';
                         document.getElementById('otpButton').style.display = 'block';
+                        document.getElementById('otpSentMessage').style.display = 'block';
+                        document.getElementById('wrongPasswordMessage').style.display = 'none';
                     } else if (response.data.token) {
                         handleSuccessfulLogin(response.data.token);
                     } else {
@@ -38,8 +40,7 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('Ein Fehler ist aufgetreten');
+                    document.getElementById('wrongPasswordMessage').style.display = 'block';
                 });
         };
 
@@ -52,12 +53,11 @@
                     if (response.data.token) {
                         handleSuccessfulLogin(response.data.token);
                     } else {
-                        alert('OTP-Verifizierung fehlgeschlagen');
+                        document.getElementById('wrongOTPMessage').style.display = 'block';
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('OTP-Verifizierung fehlgeschlagen');
+                    document.getElementById('wrongOTPMessage').style.display = 'block';
                 });
         }
 
@@ -124,6 +124,19 @@
             <div th:if="${param.logout}" class="message success">
                 <p>Sie haben sich erfolgreich ausgeloggt!</p>
             </div>
+
+            <div id="otpSentMessage" class="message message-info" style="display: none;">
+                <p>Ein Einmal-Passwort wurde an Ihre E-Mail-Adresse gesendet. Bitte überprüfen Sie Ihr Postfach.</p>
+            </div>
+
+            <div id="wrongPasswordMessage" class="message error" style="display: none;">
+                <p>Das Passwort ist falsch. Bitte versuchen Sie es erneut.</p>
+            </div>
+
+            <div id="wrongOTPMessage" class="message message-info" style="display: none;">
+                <p>OTP-Verifizierung fehlgeschlagen</p>
+            </div>
+
 
             <form id="loginForm" class="auth-form" onsubmit="login(event)">
                 <div class="form-group">

@@ -42,10 +42,10 @@ class AuthController(
         val userDetails = authentication.principal as UserDetails
         val riskScore = behaviourAnalysis.calculateRiskScore(request, loginRequest.username)
 
-//        if (riskScore >= 20) {
-//            mailService.sendOTPEmail(loginRequest.username)
-//            return ResponseEntity.ok(mapOf("requireOTP" to true))
-//        }
+        if (riskScore >= 20) {
+            mailService.sendOTPEmail(loginRequest.username)
+            return ResponseEntity.ok(mapOf("requireOTP" to true))
+        }
 
         val jwt = jwtUtils.generateJwtToken(authentication)
         val roles = userDetails.authorities.map { it.authority }

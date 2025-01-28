@@ -68,10 +68,18 @@ body {
 
 .message {
     margin-top: 20px;
-    padding: 10px;
+    margin-bottom: 20px;
+    padding: 5px;
     border-radius: 4px;
     text-align: center;
 }
+
+.message-info {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+}
+
 
 .success {
     background-color: #d1fae5;
