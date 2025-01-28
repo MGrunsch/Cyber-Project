@@ -48,14 +48,19 @@ class BehaviourAnalysis (
         return (riskScore + 5 * failedLoginAttempts).toInt()
     }
 
-    fun checkLoginTime(riskScore: Int, userId: Long) : Int {
-        var riskScore = riskScore
 
-        if (!loginService.isLoginWithinUsualTimeWindow(userId, LocalDateTime.now())){
-            riskScore += 20
+    fun checkLoginTime(riskScore: Int, userId: Long): Int {
+        var updatedRiskScore = riskScore
+        val currentLoginTime = loginService.getLastSuccessfulLogin(userId)
+
+        val anomalies = loginService.detectLoginTimeAnomalies(userId)
+        if (anomalies.contains(currentLoginTime)) {
+            updatedRiskScore += 20
         }
-        return riskScore
+
+        return updatedRiskScore
     }
+
 
     // Überprüft ob Kombination von Browser, Browser Version und Betriebssystem bereits bekannt sind
     fun checkBrowserConsistency(riskScore: Int, userId: Long, browserDetails: Map<String, String>): Int {

@@ -1,10 +1,10 @@
 package cs.finance.management.persistence.users
 
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
 @Repository
@@ -31,4 +31,7 @@ interface LoginEventRepository : JpaRepository<LoginEvent, Long> {
         @Param("browserVersion") browserVersion: String,
         @Param("operatingSystem") operatingSystem: String
     ): Boolean
+
+    @Query("SELECT le FROM LoginEvent le WHERE le.userId = :userId AND le.status = 'Success' ORDER BY le.loginTime DESC")
+    fun findLastSuccessfulLoginByUserId(@Param("userId") userId: Long, pageRequest: PageRequest): List<LoginEvent>
 }

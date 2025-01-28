@@ -2,9 +2,15 @@ package cs.finance.management.business.user
 
 import cs.finance.management.persistence.users.LoginEvent
 import cs.finance.management.persistence.users.LoginEventRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import smile.clustering.dbscan
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+
+
+
+
 
 @Service
 class LoginService (
@@ -46,6 +52,55 @@ class LoginService (
 
     fun areBrowserDetailsUsual(userId: Long, browser: String, browserVersion: String, operatingSystem: String): Boolean {
         return loginEventRepository.areBrowserDetailsKnown(userId, browser, browserVersion, operatingSystem)
+    }
+
+
+    fun detectAnomalies(userId: Long): List<LocalDateTime> {
+        val loginTimes = loginEventRepository.findLoginTimesByUserId(userId)
+        val data = loginTimes.map { time ->
+            doubleArrayOf(
+                time.dayOfWeek.value.toDouble(),  // Wochentag (1-7)
+                time.hour.toDouble() + time.minute.toDouble() / 60.0  // Uhrzeit als Dezimalzahl
+            )
+        }.toTypedArray()
+
+        // Daten normalisieren
+        val normalizedData = normalizeData(data)
+
+        // Parameter für DBSCAN werden festgelegt
+        val eps = 0.1  // Epsilon-Wert für normalisierte Daten
+        val minPts = 3 // Mindestanzahl von Punkten in einem Cluster
+
+        val dbscan = dbscan(normalizedData, minPts, eps)
+        return dbscan.y
+            .mapIndexed { index, cluster ->
+                if (cluster == 2147483647) loginTimes[index] else null
+            }
+            .filterNotNull()
+    }
+
+    fun normalizeData(data: Array<DoubleArray>): Array<DoubleArray> {
+        val minDay = 1.0
+        val maxDay = 7.0
+        val minTime = 0.0
+        val maxTime = 24.0
+
+        return data.map { point ->
+            doubleArrayOf(
+                (point[0] - minDay) / (maxDay - minDay),
+                (point[1] - minTime) / (maxTime - minTime)
+            )
+        }.toTypedArray()
+    }
+
+    fun detectLoginTimeAnomalies(userId: Long): List<LocalDateTime> {
+        return detectAnomalies(userId)
+    }
+
+    fun getLastSuccessfulLogin(userId: Long): LocalDateTime? {
+        val pageRequest = PageRequest.of(0, 1)
+        val lastLogin = loginEventRepository.findLastSuccessfulLoginByUserId(userId, pageRequest)
+        return lastLogin.firstOrNull()?.loginTime
     }
 
 }
