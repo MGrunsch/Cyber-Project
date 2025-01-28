@@ -18,7 +18,7 @@ TODOs:
 
 6. Userrollen implementieren
 
-9. Mehr Benutzermeldungen implementieren (Punkt Transparenz) -> Marc
+9. Mehr Benutzermeldungen implementieren (Punkt Transparenz) -> Marc DONE
 
 10. Token Löschung -> Marc
 
