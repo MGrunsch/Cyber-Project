@@ -22,7 +22,7 @@ TODOs:
 
 10. Token Löschung -> Marc DONE
 
-11. SMS OTP -> Marc
+11. SMS OTP -> Marc DONE
 
 12. Adaptive MFA (Sicherheitsfragen) -> Chris
 
