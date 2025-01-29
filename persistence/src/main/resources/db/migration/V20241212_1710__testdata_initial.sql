@@ -1,23 +1,29 @@
-INSERT INTO users (user_id, mail, password, role, enabled, budget, phone_number)
+INSERT INTO users (user_id, mail, password, role, enabled, budget, question, answer, phone_number)
 VALUES
-    (1, 'testuser1@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 1000.00, '+491234567890'),
-    (2, 'testuser2@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 1500.50, '+491234567891'),
-    (3, 'testuser3@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 2000.75, '+491234567892'),
-    (4, 'testuser4@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 2500.25, '+491234567893'),
-    (5, 'testuser5@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 3000.00, '+491234567894'),
-    (6, 'testuser6@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 3500.50, '+491234567895'),
-    (7, 'testuser7@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 4000.75, '+491234567896'),
-    (8, 'testuser8@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 4500.25, '+491234567897'),
-    (9, 'testuser9@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5000.00, '+491234567898'),
-    (10, 'testuser10@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50, '+491234567899'),
-    (11, 'marc.grunwald@stud.fra-uas.de', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50, '+491234567800'),
-    (12, 'unkart@stud.fra-uas.de', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50, '+491234567801');
+    (1, 'testuser1@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 1000.00, 'Was ist deine Lieblingsfarbe?', 'Rot', '+491234567890'),
+    (2, 'testuser2@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 1500.50, 'Was ist der Mädchenname deiner Mutter?', 'Müller', '+491234567890'),
+    (3, 'testuser3@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 2000.75, 'Was ist der Name deines ersten Haustieres?', 'Bello', '+491234567890'),
+    (4, 'testuser4@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 2500.25, 'Was ist deine Lieblingsfarbe?', 'Rot', '+491234567890'),
+    (5, 'testuser5@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 3000.00, 'Was ist der Mädchenname deiner Mutter?', 'Schneider', '+491234567890'),
+    (6, 'testuser6@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 3500.50, 'Was ist der Name deines ersten Haustieres?', 'Kitty', '+491234567890'),
+    (7, 'testuser7@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 4000.75, 'Was ist deine Lieblingsfarbe?', 'Blau', '+491234567890'),
+    (8, 'testuser8@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 4500.25, 'Was ist der Mädchenname deiner Mutter?', 'Fischer', '+491234567890'),
+    (9, 'testuser9@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5000.00, 'Was ist der Name deines ersten Haustieres?', 'Simba', '+491234567890'),
+    (10, 'testuser10@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50, 'Was ist deine Lieblingsfarbe?', 'Grün', '+491234567890'),
+    (11, 'marc.grunwald@stud.fra-uas.de', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50, 'Was ist deine Lieblingsfarbe?', 'Rot', '+491234567890'),
+    (12, 'unkart@stud.fra-uas.de', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50, 'Was ist deine Lieblingsfarbe?', 'Rot', '+491234567890');
 
 
 INSERT INTO login_events (user_id, mail, login_time, ip_address, location, browser, browser_version, operating_system, status)
 VALUES
    (1, 'testuser1@example.com', '2025-01-14 10:14:16.998657', '127.0.0.1', 'Frankfurt', 'TestBrowser', 'TestBVersion', 'TestOpSystem', 'Success'),
-   (1, 'testuser1@example.com', '2025-01-14 10:14:16.998657', '127.0.0.1', 'Frankfurt', 'TestBrowser', 'TestBVersion', 'TestOpSystem', 'Success');
+   (1, 'testuser1@example.com', '2025-01-14 10:14:16.998657', '127.0.0.1', 'Frankfurt', 'TestBrowser', 'TestBVersion', 'TestOpSystem', 'Success'),
+   (12, 'unkart@stud.fra-uas.de', '2025-01-28 17:56:54.285968', '127.0.0.1', 'Frankfurt', 'Chrome', '131.0.0.0', 'Windows NT 10.0; Win64; x64', 'Success'),
+   (12, 'unkart@stud.fra-uas.de', '2025-01-28 17:56:54.285968', '127.0.0.1', 'Frankfurt', 'Chrome', '131.0.0.0', 'Windows NT 10.0; Win64; x64', 'Success'),
+   (12, 'unkart@stud.fra-uas.de', '2025-01-28 17:56:54.285968', '127.0.0.1', 'Frankfurt', 'Chrome', '131.0.0.0', 'Windows NT 10.0; Win64; x64', 'Success'),
+   (12, 'unkart@stud.fra-uas.de', '2025-01-28 17:56:54.285968', '127.0.0.1', 'Frankfurt', 'Chrome', '131.0.0.0', 'Windows NT 10.0; Win64; x64', 'Success'),
+   (12, 'unkart@stud.fra-uas.de', '2025-01-28 17:56:54.285968', '127.0.0.1', 'Frankfurt', 'Chrome', '131.0.0.0', 'Windows NT 10.0; Win64; x64', 'Success');
+
 
 INSERT INTO transactions (sender_id, recipient_id, amount, timestamp)
 VALUES

@@ -29,7 +29,7 @@ data class User(
     var passwd: String = "",
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 13)
+    @Column(length = 20)
     var role: UserRole = UserRole.USER,
 
     @Column
@@ -46,6 +46,13 @@ data class User(
 
     @Column(name = "otp_expiry_time")
     var otpExpiryTime: Date? = null,
+
+    @Column(name = "question")
+    var securityQuestion: String = "",
+
+    @Column(name = "answer")
+    var answer: String = "",
+
 
     @Column(name = "phone_number", length = 20)
     var phoneNumber: String = "",

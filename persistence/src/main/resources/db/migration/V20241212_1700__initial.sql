@@ -9,6 +9,8 @@ CREATE TABLE users
     role              varchar(13)    DEFAULT 'MITARBEITER',  -- Userrole
     enabled           BOOL CHECK (enabled IN (TRUE, FALSE)), -- User status
     budget            DECIMAL(10, 2) DEFAULT 0.00,           --User's budget
+    question          varchar(255),                          -- Question user might has to answer for authentication
+    answer            varchar(255),                          -- Answer to the question
     one_time_password VARCHAR(64),                           --User OTP
     otp_request_time  TIMESTAMP without time zone,           --User's request time for the OTP
     otp_expiry_time   TIMESTAMP without time zone,           -- OTP expiry date

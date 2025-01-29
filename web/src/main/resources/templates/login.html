@@ -30,6 +30,11 @@
                         document.getElementById('pushNotificationMessage').style.display = 'block';
                         document.getElementById('loginButton').style.display = 'none';
                         window.open(response.data.pushNotificationUrl, 'Push Notification', 'width=600,height=400');
+                    } else if (response.data.requireSecurityQuestion) {
+                        document.getElementById('securityQuestionField').style.display = 'block';
+                        document.getElementById('securityQuestionLabel').innerText = response.data.securityQuestion;
+                        document.getElementById('loginButton').style.display = 'none';
+                        document.getElementById('verifySecurityQuestionButton').style.display = 'block';
                     } else if (response.data.requireOTP) {
                         document.getElementById('otpField').style.display = 'block';
                         document.getElementById('loginButton').style.display = 'none';
@@ -108,19 +113,82 @@
 
         function transferMoney() {
             const recipientId = document.getElementById('recipient').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+
+            if (amount > 500) {
+
+                // API-Aufruf zur OTP-Generierung
+                apiClient.post('/api/auth/transfer', { recipientId, amount })
+                    .then(response => {
+                        if (response.data.requireOTP) {
+                            // Zeige OTP-Feld
+                            document.getElementById('transferOtpField').style.display = 'block';
+                            document.getElementById('transferButton').style.display = 'none';
+                            document.getElementById('otpTransferButton').style.display = 'block';
+
+                            // Speichere die Transferdetails temporär
+                            window.pendingTransfer = { recipientId, amount };
+                            alert('OTP wurde an Ihre E-Mail-Adresse gesendet.');
+                        } else {
+                            alert('Überweisung erfolgreich.');
+                            navigateTo("/dashboard");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fehler beim Senden des OTP:', error);
+                        alert('Es gab ein Problem beim Verarbeiten des Transfers. Bitte versuchen Sie es erneut.');
+                    });
+            } else {
+                // Direkter Transfer ohne OTP
+                apiClient.post('/api/auth/transfer', { recipientId, amount })
+                    .then(response => {
+                        alert('Überweisung erfolgreich.');
+                        navigateTo("/dashboard");
+                    })
+                    .catch(error => {
+                        console.error('Fehler bei der Überweisung:', error);
+                        alert('Überweisung fehlgeschlagen.');
+                    });
+            }
+        }
+
+        function verifyTransferOTP() {
+            const otp = document.getElementById('transferOtp').value;
+            const recipientId = document.getElementById('recipient').value;
             const amount = document.getElementById('amount').value;
 
-            console.log('Überweisung:', {recipientId, amount});
-            console.log('Aktueller Token:', localStorage.getItem('jwtToken')); // Debugging-Log
-
-            apiClient.post('/api/auth/transfer', {recipientId, amount})
+            // API-Aufruf zur OTP-Überprüfung und Transferausführung
+            apiClient.post('/api/auth/verify-transfer-otp', { recipientId, amount, otp })
                 .then(response => {
-                    console.log('Überweisung erfolgreich:', response.data);
-                    navigateTo('/dashboard');
+                    alert('Transfer erfolgreich!');
+                    navigateTo("/dashboard");
+
                 })
                 .catch(error => {
-                    console.error('Error bei der Überweisung:', error);
-                    alert('Überweisung fehlgeschlagen');
+                    console.error('Fehler bei der OTP-Überprüfung:', error);
+                    alert('OTP-Überprüfung fehlgeschlagen. Bitte prüfen Sie das OTP und versuchen Sie es erneut.');
+                });
+        }
+
+        function verifySecurityQuestion() {
+            const username = document.getElementById('username').value;
+            const answer = document.getElementById('securityAnswer').value;
+
+            apiClient.post('/api/auth/verify-security-question', { username, answer })
+                .then(response => {
+                    if (response.data.token) {
+                        // JWT speichern
+                        localStorage.setItem('jwtToken', response.data.token);
+                        // Weiter zum Dashboard
+                        navigateTo("/dashboard");
+                    } else {
+                        alert('Antwort auf die Sicherheitsfrage ist falsch');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Fehler bei der Verifizierung der Sicherheitsfrage.');
                 });
         }
 
@@ -265,6 +333,13 @@
                     <label for="otp">One-Time Password:</label>
                     <input type="text" id="otp" name="otp" class="form-input"/>
                 </div>
+                <div id="securityQuestionField" style="display: none;" class="form-group">
+                    <label id="securityQuestionLabel"></label>
+                    <input type="text" id="securityAnswer" name="securityAnswer" class="form-input"/>
+                </div>
+                <button id="verifySecurityQuestionButton" type="button" onclick="verifySecurityQuestion()" style="display: none;" class="auth-button">
+                    Sicherheitsfrage beantworten
+                </button>
                 <button id="loginButton" type="submit" class="auth-button">Anmelden</button>
                 <button id="otpButton" type="button" onclick="verifyOTP()" style="display: none;" class="auth-button">
                     OTP verifizieren
