@@ -9,27 +9,31 @@
     <header class="dashboard-header">
         <h1>Einstellungen</h1>
         <nav>
-            <a th:href="@{/dashboard}" class="nav-link">Zurück zum Dashboard</a>
+            <a href="/dashboard" class="nav-link">Zurück zum Dashboard</a>
         </nav>
     </header>
 
     <main class="dashboard-content">
         <section class="settings-section">
             <h2>Persönliche Daten ändern</h2>
-            <div th:if="${param.success}" class="alert alert-success">
-                <p th:if="${param.success[0] == 'passwordChanged'}">Passwort wurde erfolgreich geändert.</p>
+
+            <div id="successMessage" class="message success" style="display: none;">
+                <p>Passwort wurde erfolgreich geändert.</p>
             </div>
 
-            <div th:if="${param.error}" class="alert alert-danger">
-                <p th:if="${param.error[0] == 'wrongPassword'}">Das aktuelle Passwort ist falsch.</p>
-                <p th:if="${param.error[0] == 'passwordMismatch'}">Die neuen Passwörter stimmen nicht überein.</p>
+            <div id="errorMessage" class="message error" style="display: none;">
+                <p id="errorText"></p>
             </div>
 
-            <form th:action="@{/settings/changePassword}" method="post">
+            <div id="tokenErrorMessage" class="message error" style="display: none;">
+                <p>Ungültiger Hardware-Token. Bitte versuchen Sie es erneut.</p>
+            </div>
+
+            <form id="passwordChangeForm">
                 <div class="form-group">
                     <label>E-Mail:</label>
-                    <input type="email" id="email" name="email" required class="form-input" th:value="${userMail}"
-                           disabled>
+                    <input type="email" id="email" name="email" required class="form-input" th:value="${userMail}" disabled>
+                    <input type="hidden" id="emailHidden" name="email" th:value="${userMail}">
                 </div>
                 <div class="form-group">
                     <label for="currentPassword">Aktuelles Passwort:</label>
@@ -43,9 +47,16 @@
                     <label for="confirmPassword">Passwort bestätigen:</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" required class="form-input">
                 </div>
-                <button type="submit" class="transfer-button">Passwort ändern</button>
+                <button type="button" onclick="showHardwareTokenForm()" class="transfer-button">Passwort ändern</button>
             </form>
 
+            <form id="hardwareTokenForm" style="display: none;" onsubmit="verifyHardwareToken(event)">
+                <div class="form-group">
+                    <label for="hardwareToken">Hardware-Token:</label>
+                    <input type="text" id="hardwareToken" name="hardwareToken" required class="form-input">
+                </div>
+                <button type="submit" class="transfer-button">Bestätigen</button>
+            </form>
         </section>
     </main>
 </div>

@@ -132,6 +132,91 @@
                 document.getElementById('loginButton').style.display = 'block';
             }
         };
+
+        let passwordData = {};
+
+        function showHardwareTokenForm() {
+            // Speichere die Passwortdaten
+            passwordData = {
+                email: document.getElementById('emailHidden').value,
+                currentPassword: document.getElementById('currentPassword').value,
+                newPassword: document.getElementById('newPassword').value,
+                confirmPassword: document.getElementById('confirmPassword').value
+            };
+
+            // Zeige das Hardware-Token-Formular an
+            document.getElementById('hardwareTokenForm').style.display = 'block';
+            document.getElementById('passwordChangeForm').style.display = 'none';
+
+            // Verstecke alle Meldungen
+            hideAllMessages();
+        }
+
+        function verifyHardwareToken(event) {
+            event.preventDefault();
+
+            const hardwareToken = document.getElementById('hardwareToken').value;
+
+            fetch('/api/settings/verify-token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token: hardwareToken })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Hardware-Token erfolgreich bestätigt, Passwortänderung ausführen
+                        changePassword();
+                    } else {
+                        showMessage('tokenErrorMessage');
+                    }
+                })
+                .catch(error => {
+                    console.error('Fehler bei der Token-Überprüfung:', error);
+                    showErrorMessage('Ein Fehler ist bei der Token-Überprüfung aufgetreten.');
+                });
+        }
+
+        function changePassword() {
+            fetch('/api/settings/change-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams(passwordData).toString()
+            })
+                .then(response => {
+                    if (response.ok) {
+                        showMessage('successMessage');
+                    } else {
+                        return response.text().then(text => {
+                            showErrorMessage(text);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Fehler bei der Passwortänderung:', error);
+                    showErrorMessage('Ein Fehler ist bei der Passwortänderung aufgetreten.');
+                });
+        }
+
+        function showMessage(messageId) {
+            hideAllMessages();
+            document.getElementById(messageId).style.display = 'block';
+        }
+
+        function showErrorMessage(message) {
+            hideAllMessages();
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+
+        function hideAllMessages() {
+            const messages = ['successMessage', 'errorMessage', 'tokenErrorMessage'];
+            messages.forEach(id => document.getElementById(id).style.display = 'none');
+        }
     </script>
 </head>
 <body>

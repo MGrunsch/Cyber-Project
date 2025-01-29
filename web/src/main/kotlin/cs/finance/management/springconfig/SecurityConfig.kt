@@ -62,7 +62,7 @@ class SecurityConfig(
                 auth
                     .requestMatchers("/css/**", "/js/**", "/favicon.ico").permitAll()
                     .requestMatchers("/finance-management", "/register").permitAll()
-                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/auth/**", "/api/settings/**").permitAll()
                     .anyRequest().authenticated()
             }
 

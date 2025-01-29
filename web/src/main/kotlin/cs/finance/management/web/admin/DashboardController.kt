@@ -34,4 +34,13 @@ class DashboardController(
 
         return "dashboard"
     }
+
+    @GetMapping("/settings")
+    fun showSettings(model: Model): String {
+        val user = userService.getAuthenticatedUser()
+
+        model.addAttribute("userMail", user.mail)
+
+        return "settings"
+    }
 }

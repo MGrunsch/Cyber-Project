@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -43,7 +42,7 @@ class AuthController(
         val userDetails = authentication.principal as UserDetails
         val riskScore = behaviourAnalysis.calculateRiskScore(request, loginRequest.username)
 
-        if (riskScore != null) {
+        if (riskScore in 0..10) {
             return ResponseEntity.ok(mapOf(
                 "requirePushNot" to true,
                 "pushNotificationUrl" to "/api/auth/push-notification?username=${loginRequest.username}"
