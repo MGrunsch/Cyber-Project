@@ -2,6 +2,7 @@ package cs.finance.management.business.user
 
 import cs.finance.management.persistence.users.User
 import cs.finance.management.persistence.users.UserRepository
+import cs.finance.management.persistence.users.UserRole
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -43,5 +44,19 @@ class UserService(
 
         userRepository.save(sender)
         userRepository.save(recipient)
+    }
+
+    // Methode um Benutzerrolle zu aktualisieren
+    @Transactional
+    fun updateUserRole(mail: String, newRole: UserRole): User {
+        // Benutzer anhand der E-Mail-Adresse finden
+        val user = userRepository.findByMail(mail)
+            ?: throw IllegalArgumentException("User not found with email: $mail")
+
+        // Die Rolle des Benutzers aktualisieren
+        user.role = newRole
+
+        // Den aktualisierten Benutzer speichern
+        return userRepository.save(user)
     }
 }

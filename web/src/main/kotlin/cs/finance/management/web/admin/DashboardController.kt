@@ -24,6 +24,7 @@ class DashboardController(
         return "registration"
     }
 
+
     @GetMapping("/dashboard")
     fun dashboard(model: Model): String {
         val user = userService.getAuthenticatedUser()
@@ -34,4 +35,6 @@ class DashboardController(
 
         return "dashboard"
     }
+
+
 }

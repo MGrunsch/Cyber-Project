@@ -1,20 +1,27 @@
-INSERT INTO users (user_id, mail, password, role, enabled, budget)
+INSERT INTO users (user_id, mail, password, role, enabled, budget, question, answer)
 VALUES
-    (1, 'testuser1@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 1000.00),
-    (2, 'testuser2@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 1500.50),
-    (3, 'testuser3@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 2000.75),
-    (4, 'testuser4@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 2500.25),
-    (5, 'testuser5@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 3000.00),
-    (6, 'testuser6@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 3500.50),
-    (7, 'testuser7@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 4000.75),
-    (8, 'testuser8@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 4500.25),
-    (9, 'testuser9@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5000.00),
-    (10, 'testuser10@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50),
-    (11, 'marc.grunwald@stud.fra-uas.de', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50),
-    (12, 'unkart@stud.fra-uas.de', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50);
+    (1, 'testuser1@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 1000.00, 'Was ist deine Lieblingsfarbe?', 'Rot'),
+    (2, 'testuser2@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 1500.50, 'Was ist der Mädchenname deiner Mutter?', 'Müller'),
+    (3, 'testuser3@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 2000.75, 'Was ist der Name deines ersten Haustieres?', 'Bello'),
+    (4, 'testuser4@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 2500.25, 'Was ist deine Lieblingsfarbe?', 'Rot'),
+    (5, 'testuser5@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 3000.00, 'Was ist der Mädchenname deiner Mutter?', 'Schneider'),
+    (6, 'testuser6@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 3500.50, 'Was ist der Name deines ersten Haustieres?', 'Kitty'),
+    (7, 'testuser7@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 4000.75, 'Was ist deine Lieblingsfarbe?', 'Blau'),
+    (8, 'testuser8@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 4500.25, 'Was ist der Mädchenname deiner Mutter?', 'Fischer'),
+    (9, 'testuser9@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5000.00, 'Was ist der Name deines ersten Haustieres?', 'Simba'),
+    (10, 'testuser10@example.com', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50, 'Was ist deine Lieblingsfarbe?', 'Grün'),
+    (11, 'marc.grunwald@stud.fra-uas.de', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50, 'Was ist deine Lieblingsfarbe?', 'Rot'),
+    (12, 'unkart@stud.fra-uas.de', '$2a$10$NPENOBdGKCmQPN8b8ejORu4s6PTuZpaQBNbhI1Gt4S.av4rpaG032', 'USER', true, 5500.50, 'Was ist deine Lieblingsfarbe?', 'Rot');
 
 
 INSERT INTO login_events (user_id, mail, login_time, ip_address, location, browser, browser_version, operating_system, status)
 VALUES
    (1, 'testuser1@example.com', '2025-01-14 10:14:16.998657', '127.0.0.1', 'Frankfurt', 'TestBrowser', 'TestBVersion', 'TestOpSystem', 'Success'),
-   (1, 'testuser1@example.com', '2025-01-14 10:14:16.998657', '127.0.0.1', 'Frankfurt', 'TestBrowser', 'TestBVersion', 'TestOpSystem', 'Success');
+   (1, 'testuser1@example.com', '2025-01-14 10:14:16.998657', '127.0.0.1', 'Frankfurt', 'TestBrowser', 'TestBVersion', 'TestOpSystem', 'Success'),
+   (12, 'unkart@stud.fra-uas.de', '2025-01-28 17:56:54.285968', '127.0.0.1', 'Frankfurt', 'Chrome', '131.0.0.0', 'Windows NT 10.0; Win64; x64', 'Success'),
+   (12, 'unkart@stud.fra-uas.de', '2025-01-28 17:56:54.285968', '127.0.0.1', 'Frankfurt', 'Chrome', '131.0.0.0', 'Windows NT 10.0; Win64; x64', 'Success'),
+   (12, 'unkart@stud.fra-uas.de', '2025-01-28 17:56:54.285968', '127.0.0.1', 'Frankfurt', 'Chrome', '131.0.0.0', 'Windows NT 10.0; Win64; x64', 'Success'),
+   (12, 'unkart@stud.fra-uas.de', '2025-01-28 17:56:54.285968', '127.0.0.1', 'Frankfurt', 'Chrome', '131.0.0.0', 'Windows NT 10.0; Win64; x64', 'Success'),
+   (12, 'unkart@stud.fra-uas.de', '2025-01-28 17:56:54.285968', '127.0.0.1', 'Frankfurt', 'Chrome', '131.0.0.0', 'Windows NT 10.0; Win64; x64', 'Success');
+
+

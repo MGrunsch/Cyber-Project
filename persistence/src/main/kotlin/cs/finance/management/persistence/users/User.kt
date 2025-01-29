@@ -29,7 +29,7 @@ data class User(
     var passwd: String = "",
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 13)
+    @Column(length = 20)
     var role: UserRole = UserRole.USER,
 
     @Column
@@ -43,6 +43,12 @@ data class User(
 
     @Column(name = "otp_request_time")
     var otpRequestTime: Date = Date.from(Instant.now().plusSeconds(600)),
+
+    @Column(name = "question")
+    var securityQuestion: String = "",
+
+    @Column(name = "answer")
+    var answer: String = ""
 
 
 
