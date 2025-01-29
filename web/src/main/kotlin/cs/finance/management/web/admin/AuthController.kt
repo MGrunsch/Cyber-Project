@@ -43,6 +43,7 @@ class AuthController(
         val riskScore = behaviourAnalysis.calculateRiskScore(request, loginRequest.username)
 
         if (riskScore in 0..10) {
+            //trigger push notification
             return ResponseEntity.ok(mapOf(
                 "requirePushNot" to true,
                 "pushNotificationUrl" to "/api/auth/push-notification?username=${loginRequest.username}"
@@ -50,11 +51,13 @@ class AuthController(
         }
 
         if (riskScore in 10..20) {
+            //create and send otp via mail
             mailService.sendOTPEmail(loginRequest.username)
             return ResponseEntity.ok(mapOf("requireOTP" to true))
         }
 
         if (riskScore in 20.. 100) {
+            //create and send otp via SMS
             otpService.generateOneTimePassword(loginRequest.username)
             val phoneNumber = userService.getCurrentUserPhoneNumber()
             val maskedPhoneNumber = maskPhoneNumber(phoneNumber ?: "")
