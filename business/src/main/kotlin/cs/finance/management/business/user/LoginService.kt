@@ -27,6 +27,10 @@ class LoginService (
         return loginEventRepository.findIp(ip)
     }
 
+    fun getPreviousLoginIps() : List<String> {
+        return loginEventRepository.getPreviousLoginIps()
+    }
+
     // Durschnittliches Zeitfenster ermitteln und Zeitraum um den Durschnitt herum legen
     fun analyzeLoginTimeWindow(userId: Long): Pair<Int, Int> {
         val loginTimes = loginEventRepository.findLoginTimesByUserId(userId)
