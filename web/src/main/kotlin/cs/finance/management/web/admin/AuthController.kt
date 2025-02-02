@@ -54,6 +54,7 @@ class AuthController(
         }
 
         if (riskScore in 30..40) {
+            //trigger security question
             val user = userService.findByMail(loginRequest.username)
             if (user != null) {
                 return ResponseEntity.ok(mapOf(
@@ -69,7 +70,7 @@ class AuthController(
             return ResponseEntity.ok(mapOf("requireOTP" to true))
         }
 
-        if (riskScore in 60.. 100) {
+        if (riskScore in 50.. 100) {
             //create and send otp via SMS
             otpService.generateOneTimePassword(loginRequest.username)
             val phoneNumber = userService.getCurrentUserPhoneNumber()
