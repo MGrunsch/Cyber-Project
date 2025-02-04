@@ -32,9 +32,9 @@ class BehaviourAnalysis (
         )
     }
 
-    fun checkIpAdress(ipAdress : String, riskScore : Int) : Int{
+    fun checkIpAdress(userId: Long, ipAdress : String, riskScore : Int) : Int{
         var riskScore = riskScore
-        val ips = loginService.getPreviousLoginIps()
+        val ips = loginService.getPreviousLoginIps(userId)
         if (!ips.contains(ipAdress)){
             riskScore = riskScore + 20
         }
@@ -99,7 +99,7 @@ class BehaviourAnalysis (
         val userAgent = request.getHeader("User-Agent") ?: "Unknown"
         val browserDetails = analyzeUserAgent(userAgent)
 
-        riskScore = checkIpAdress(ipAddress, riskScore)
+        riskScore = checkIpAdress(user.id, ipAddress, riskScore)
         riskScore = getFailedLoginAttempts(riskScore)
         riskScore = checkLoginTime(riskScore, user.id)
         riskScore = checkBrowserConsistency(riskScore, user.id, browserDetails)

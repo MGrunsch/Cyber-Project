@@ -27,8 +27,8 @@ class LoginService (
         return loginEventRepository.findIp(ip)
     }
 
-    fun getPreviousLoginIps() : List<String> {
-        return loginEventRepository.getPreviousLoginIps()
+    fun getPreviousLoginIps(userId: Long) : List<String> {
+        return loginEventRepository.getPreviousLoginIps(userId)
     }
 
     // Durschnittliches Zeitfenster ermitteln und Zeitraum um den Durschnitt herum legen
