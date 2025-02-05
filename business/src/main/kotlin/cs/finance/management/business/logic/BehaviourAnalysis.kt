@@ -32,11 +32,10 @@ class BehaviourAnalysis (
         )
     }
 
-    fun checkIpAdress(ipAdress : String, riskScore : Int) : Int{
-        //val user = userService.getAuthenticatedUser()
-        //val ips = loginService.checkIp(ipAdress)
+    fun checkIpAdress(userId: Long, ipAdress : String, riskScore : Int) : Int{
         var riskScore = riskScore
-        if (!loginService.checkIp(ipAdress)){
+        val ips = loginService.getPreviousLoginIps(userId)
+        if (!ips.contains(ipAdress)){
             riskScore = riskScore + 20
         }
         return riskScore
@@ -44,8 +43,21 @@ class BehaviourAnalysis (
 
     // Ermittelt die Anzahl der fehlgeschlagenen Loginversuche innerhalb der letzten 30 Minuten
     fun getFailedLoginAttempts(riskScore: Int) : Int {
-        val failedLoginAttempts = loginService.failedLoginAttempts()
-        return (riskScore + 5 * failedLoginAttempts).toInt()
+        val failedLoginAttempts = loginService.failedLoginAttempts().toInt()
+        var riskScore = riskScore
+        if (failedLoginAttempts == 0){
+            riskScore += 0
+        }
+        else if (failedLoginAttempts == 1){
+            riskScore += 10
+        }
+        else if (failedLoginAttempts == 2){
+            riskScore += 20
+        }
+        else {
+            riskScore += 40
+        }
+        return riskScore
     }
 
 
@@ -55,7 +67,7 @@ class BehaviourAnalysis (
 
         val anomalies = loginService.detectLoginTimeAnomalies(userId)
         if (anomalies.contains(currentLoginTime)) {
-            updatedRiskScore += 20
+            updatedRiskScore += 25
         }
 
         return updatedRiskScore
@@ -87,7 +99,7 @@ class BehaviourAnalysis (
         val userAgent = request.getHeader("User-Agent") ?: "Unknown"
         val browserDetails = analyzeUserAgent(userAgent)
 
-        riskScore = checkIpAdress(ipAddress, riskScore)
+        riskScore = checkIpAdress(user.id, ipAddress, riskScore)
         riskScore = getFailedLoginAttempts(riskScore)
         riskScore = checkLoginTime(riskScore, user.id)
         riskScore = checkBrowserConsistency(riskScore, user.id, browserDetails)

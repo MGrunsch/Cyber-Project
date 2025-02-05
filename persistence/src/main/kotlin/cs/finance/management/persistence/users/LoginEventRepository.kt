@@ -17,6 +17,38 @@ interface LoginEventRepository : JpaRepository<LoginEvent, Long> {
     @Query("SELECT COUNT(le) > 0 FROM LoginEvent le WHERE le.ipAddress = :ipAddress AND le.status = 'Success'")
     fun findIp(@Param("ipAddress") ipAddress : String): Boolean
 
+
+    /*
+    @Query("""
+    SELECT le.ipAddress 
+    FROM LoginEvent le 
+    WHERE le.status = 'Success' 
+    AND le.loginTime < (
+        SELECT MAX(le2.loginTime) 
+        FROM LoginEvent le2 
+        WHERE le2.status = 'Success'
+    )
+    ORDER BY le.loginTime DESC
+""")
+    fun getPreviousLoginIps(): List<String>
+     */
+
+    @Query("""
+    SELECT le.ipAddress 
+    FROM LoginEvent le 
+    WHERE le.userId = :userId
+      AND le.status = 'Success' 
+      AND le.loginTime < (
+          SELECT MAX(le2.loginTime) 
+          FROM LoginEvent le2 
+          WHERE le2.userId = :userId 
+            AND le2.status = 'Success'
+      )
+    ORDER BY le.loginTime DESC
+""")
+    fun getPreviousLoginIps(@Param("userId") userId: Long): List<String>
+
+
     @Query("SELECT le.loginTime FROM LoginEvent le WHERE le.userId = :userId AND le.status = 'Success'")
     fun findLoginTimesByUserId(@Param("userId") userId: Long): List<LocalDateTime>
 
